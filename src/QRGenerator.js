@@ -33,6 +33,7 @@ function QRGenerator() {
   return (
     <Container className="mt-5">
       <h1 className="mb-5">💯 Free QR Code Generator</h1>
+      <p>This little app just generates QR codes. It sounds simple, but so many other QR Generators insert ads, spam, and trickery these days. Here, you can generate QR codes with peace of mind. No tracking, no ads, no bullshit.</p>
       <Form>
         <InputGroup className="mb-3">
           <FormControl type="text" onChange={handleChange} value={text} placeholder="Enter text to generate QR code" />
