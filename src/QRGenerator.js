@@ -193,6 +193,7 @@ function QRGenerator() {
           <FormControl as="select" onChange={e => setQrStyle(e.target.value)} value={qrStyle || 'squares'}>
             <option value="squares">Squares</option>
             <option value="dots">Dots</option>
+            <option value="fluid">Fluid</option>
           </FormControl>
         </Form.Group>
       </Form>
