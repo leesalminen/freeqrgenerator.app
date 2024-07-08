@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import QRCode from 'qrcode.react';
+import { QRCode } from 'react-qrcode-logo';
 import { Container, Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 
 function QRGenerator() {
   const [text, setText] = useState('');
+  const [image, setImage] = useState(null);
   const qrRef = useRef(null);
 
   function handleChange(event) {
@@ -12,6 +13,17 @@ function QRGenerator() {
     const url = new URL(window.location);
     url.searchParams.set('value', value);
     window.history.replaceState({}, '', url);
+  }
+
+  function handleImageUpload(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   }
 
   function handleDownload() {
@@ -39,11 +51,14 @@ function QRGenerator() {
         <InputGroup className="mb-3">
           <FormControl type="text" onChange={handleChange} value={text} placeholder="Enter text to generate QR code" />
         </InputGroup>
+        <InputGroup className="mb-3">
+          <FormControl type="file" accept="image/*" onChange={handleImageUpload} />
+        </InputGroup>
       </Form>
       {text && (
         <div className="mt-5 text-center">
           <div className="border border-secondary rounded p-3 d-inline-block" ref={qrRef}>
-            <QRCode value={text} size={200} />
+            <QRCode value={text} size={300} logoWidth={75} logoImage={image} />
           </div>
           <br />
           <Button className="mt-3" variant="primary" onClick={handleDownload}>Download</Button>
