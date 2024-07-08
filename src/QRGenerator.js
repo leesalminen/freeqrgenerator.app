@@ -14,12 +14,28 @@ function QRGenerator() {
   const [logoPadding, setLogoPadding] = useState("");
   const [logoPaddingStyle, setLogoPaddingStyle] = useState("square");
   const [qrStyle, setQrStyle] = useState("squares");
+  const [sizeInput, setSizeInput] = useState(size);
+  const [logoWidthInput, setLogoWidthInput] = useState(logoWidth);
 
   const qrRef = useRef(null);
 
   function generateRandomKey() {
     return Math.random().toString(36).substring(2, 10);
   }
+
+  const handleSizeBlur = () => {
+    const parsedSize = parseInt(sizeInput, 10);
+    if (!isNaN(parsedSize) && parsedSize > 0) {
+      setSize(parsedSize);
+    }
+  };
+
+  const handleLogoWidthBlur = () => {
+    const parsedLogoWidth = parseInt(logoWidthInput, 10);
+    if (!isNaN(parsedLogoWidth) && parsedLogoWidth > 0) {
+      setLogoWidth(parsedLogoWidth);
+    }
+  };
 
   function updateQueryString(params) {
     const url = new URL(window.location);
@@ -87,12 +103,14 @@ function QRGenerator() {
   
     if (sizeParam && !isNaN(sizeParam)) {
       setSize(parseInt(sizeParam, 10));
+      setSizeInput(parseInt(sizeParam, 10));
     } else {
       setSize(300);
     }
   
     if (logoWidthParam && !isNaN(logoWidthParam)) {
       setLogoWidth(parseInt(logoWidthParam, 10));
+      setLogoWidthInput(parseInt(logoWidthParam, 10));
     } else {
       setLogoWidth(100);
     }
@@ -144,8 +162,9 @@ function QRGenerator() {
           <FormLabel>QR Code Size</FormLabel>
           <FormControl
             type="number"
-            onChange={e => setSize(parseInt(e.target.value, 10) || 300)}
-            value={size || 300}
+            onChange={e => setSizeInput(e.target.value)}
+            onBlur={handleSizeBlur}
+            value={sizeInput}
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -169,8 +188,9 @@ function QRGenerator() {
           <FormLabel>Logo Width</FormLabel>
           <FormControl
             type="number"
-            onChange={e => setLogoWidth(parseInt(e.target.value, 10) || 100)}
-            value={logoWidth || 100}
+            onChange={e => setLogoWidthInput(e.target.value)}
+            onBlur={handleLogoWidthBlur}
+            value={logoWidthInput}
           />
         </Form.Group>
         <Form.Group className="mb-3">
