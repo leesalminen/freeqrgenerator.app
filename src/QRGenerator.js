@@ -11,6 +11,9 @@ function QRGenerator() {
   const [fgColor, setFgColor] = useState("");
   const [level, setLevel] = useState("");
   const [logoWidth, setLogoWidth] = useState("");
+  const [logoPadding, setLogoPadding] = useState("");
+  const [logoPaddingStyle, setLogoPaddingStyle] = useState("square");
+  const [qrStyle, setQrStyle] = useState("squares");
 
   const qrRef = useRef(null);
 
@@ -70,6 +73,9 @@ function QRGenerator() {
     const fgColorParam = urlParams.get('fgColor');
     const levelParam = urlParams.get('level');
     const logoWidthParam = urlParams.get('logoWidth');
+    const logoPaddingParam = urlParams.get('logoPadding');
+    const logoPaddingStyleParam = urlParams.get('logoPaddingStyle');
+    const qrStyleParam = urlParams.get('qrStyle');
   
     if (valueParam) setText(valueParam);
   
@@ -90,6 +96,15 @@ function QRGenerator() {
     } else {
       setLogoWidth(100);
     }
+
+    if (logoPaddingParam && !isNaN(logoPaddingParam)) {
+      setLogoPadding(parseInt(logoPaddingParam, 10));
+    } else {
+      setLogoPadding(0);
+    }
+
+    if (logoPaddingStyleParam) setLogoPaddingStyle(logoPaddingStyleParam);
+    if (qrStyleParam) setQrStyle(qrStyleParam);
   
     if (bgColorParam) setBgColor(bgColorParam);
     if (fgColorParam) setFgColor(fgColorParam);
@@ -104,9 +119,12 @@ function QRGenerator() {
       fgColor,
       level,
       logoWidth,
+      logoPadding,
+      logoPaddingStyle,
+      qrStyle,
       imageKey
     });
-  }, [text, size, bgColor, fgColor, level, logoWidth, imageKey]);
+  }, [text, size, bgColor, fgColor, level, logoWidth, logoPadding, logoPaddingStyle, qrStyle, imageKey]);
 
   return (
     <Container className="mt-5">
@@ -155,6 +173,28 @@ function QRGenerator() {
             value={logoWidth || 100}
           />
         </Form.Group>
+        <Form.Group className="mb-3">
+          <FormLabel>Logo Padding</FormLabel>
+          <FormControl
+            type="number"
+            onChange={e => setLogoPadding(parseInt(e.target.value, 10) || 0)}
+            value={logoPadding || 0}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <FormLabel>Logo Padding Style</FormLabel>
+          <FormControl as="select" onChange={e => setLogoPaddingStyle(e.target.value)} value={logoPaddingStyle || 'square'}>
+            <option value="square">Square</option>
+            <option value="round">Round</option>
+          </FormControl>
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <FormLabel>QR Style</FormLabel>
+          <FormControl as="select" onChange={e => setQrStyle(e.target.value)} value={qrStyle || 'squares'}>
+            <option value="squares">Squares</option>
+            <option value="dots">Dots</option>
+          </FormControl>
+        </Form.Group>
       </Form>
       { text && (
         <div className="mt-5 text-center">
@@ -167,6 +207,9 @@ function QRGenerator() {
               level={level || 'L'}
               logoImage={image} 
               logoWidth={logoWidth || 100} 
+              logoPadding={logoPadding || 0}
+              logoPaddingStyle={logoPaddingStyle || 'square'}
+              qrStyle={qrStyle || 'squares'}
             />
           </div>
           <br />
